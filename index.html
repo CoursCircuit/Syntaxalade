@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <meta name="color-scheme" content="light" />
+    <title>Syntaxalade</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="core.js"></script>
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar" aria-label="Navigation principale">
+      <a class="brand" href="#play" aria-label="Syntaxalade, accueil"
+        ><img src="assets/icon.svg" alt="" /><strong>Syntaxalade</strong></a
+      >
+      <nav id="navigation">
+        <button
+          data-view="play"
+          aria-label="Jouer"
+          title="Jouer"
+          class="nav-item active"
+        >
+          <i data-icon="play"></i><span>Jouer</span>
+        </button>
+        <button
+          data-view="library"
+          aria-label="Mes listes"
+          title="Mes listes"
+          class="nav-item"
+        >
+          <i data-icon="book"></i><span>Mes listes</span>
+        </button>
+        <button
+          data-view="classes"
+          aria-label="Mes classes"
+          title="Mes classes"
+          class="nav-item"
+        >
+          <i data-icon="users"></i><span>Mes classes</span>
+        </button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button
+          data-view="help"
+          aria-label="Aide"
+          title="Aide"
+          class="nav-item"
+        >
+          <i data-icon="help"></i><span>Aide</span></button
+        ><button
+          data-view="settings"
+          aria-label="Réglages"
+          title="Réglages"
+          class="nav-item"
+        >
+          <i data-icon="settings"></i><span>Réglages</span>
+        </button>
+        <div class="sidebar-footer">
+          <span class="save-indicator"></span
+          ><span id="saveStatus" role="status"
+            >Enregistré sur cet ordinateur</span
+          ><small>Syntaxalade 2.1 · Sans connexion</small>
+        </div>
+      </div>
+    </aside>
+    <main id="main" tabindex="-1">
+      <header class="page-header">
+        <div>
+          <h1 id="pageTitle">Vos phrases, à vous de jouer.</h1>
+          <p id="pageSubtitle">
+            Préparez une liste. Le jeu s’occupe du mélange.
+          </p>
+        </div>
+        <button id="helpBtn" data-view="help" class="button secondary">
+          <i data-icon="help"></i><span>Comment ça marche ?</span></button
+        ><button
+          id="projectionBtn"
+          title="Projeter le jeu en plein écran"
+          class="button secondary"
+          hidden
+        >
+          <i data-icon="monitor"></i><span>Projeter le jeu</span>
+        </button>
+      </header>
+      <section id="view-play" class="view" aria-label="Jouer">
+        <div id="welcome" class="welcome">
+          <div class="welcome-intro">
+            <div class="welcome-copy">
+              <h2>Commençons par votre première liste.</h2>
+              <p>
+                Ajoutez vos phrases, avec ou sans traduction. Vous pourrez les
+                réutiliser à chaque séance.
+              </p>
+              <button class="button primary large" data-action="first-list">
+                <i data-icon="plus"></i>Créer ma première liste</button
+              ><button
+                class="text-button welcome-import"
+                data-action="import-text"
+              >
+                <i data-icon="upload"></i>Importer un fichier
+              </button>
+            </div>
+            <img
+              class="welcome-art"
+              src="assets/salad.png"
+              alt="Feuilles de salade et tuiles en verre"
+              draggable="false"
+            />
+          </div>
+          <ol class="onboarding-steps">
+            <li>
+              <span class="step-number">1</span>
+              <div>
+                <h3>Ajoutez vos phrases</h3>
+                <p>Écrivez-les ou collez un texte.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-number">2</span>
+              <div>
+                <h3>Choisissez vos équipes</h3>
+                <p>Facultatif : jouez aussi tous ensemble.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-number">3</span>
+              <div>
+                <h3>Projetez et jouez</h3>
+                <p>Les mots sont mélangés automatiquement.</p>
+              </div>
+            </li>
+          </ol>
+          <p class="local-note">
+            <i data-icon="monitor"></i>Aucun compte. Tout reste sur votre
+            ordinateur.
+          </p>
+        </div>
+        <form id="launchForm" class="setup-strip" hidden>
+          <label
+            >Liste de phrases<select
+              id="listSelect"
+              aria-label="Liste de phrases"
+            ></select
+          ></label>
+          <button
+            type="button"
+            class="button icon-only setup-edit"
+            data-action="edit-selected-list"
+            title="Modifier cette liste"
+            aria-label="Modifier cette liste"
+          >
+            <i data-icon="edit"></i>
+          </button>
+          <label
+            >Classe ou équipes<select
+              id="classSelect"
+              aria-label="Classe ou équipes"
+            ></select
+          ></label>
+          <label
+            >Temps de réflexion<select
+              id="durationSelect"
+              aria-label="Durée de la manche"
+            >
+              <option value="0">Sans limite</option>
+              <option value="15">15 secondes</option>
+              <option value="30">30 secondes</option>
+              <option value="45">45 secondes</option>
+              <option value="60">1 minute</option>
+              <option value="90">1 min 30</option>
+              <option value="120">2 minutes</option>
+              <option value="180">3 minutes</option>
+            </select></label
+          >
+          <button type="submit" id="launchBtn" class="button primary">
+            <i data-icon="play"></i>Démarrer
+          </button>
+        </form>
+        <p id="pendingSetup" class="field-help pending-setup" hidden>
+          Ces choix seront utilisés pour la prochaine partie. La partie en cours
+          reste inchangée.
+        </p>
+        <div id="gameLayout" class="game-layout" hidden>
+          <section id="stage" class="stage" aria-label="Zone de jeu">
+            <div class="stage-hud">
+              <span id="roundLabel" class="round-label">PRÊT À JOUER</span>
+              <div
+                id="timebar"
+                role="progressbar"
+                aria-label="Temps restant"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="100"
+              >
+                <div id="timebarFill"></div>
+              </div>
+              <div class="timer-controls">
+                <button
+                  id="pauseBtn"
+                  class="button icon-only"
+                  aria-label="Mettre en pause"
+                  title="Pause (Espace)"
+                  hidden
+                >
+                  <i data-icon="pause"></i></button
+                ><output id="timer" aria-label="Temps restant" aria-live="off"
+                  >00:45</output
+                >
+              </div>
+            </div>
+            <div class="stage-content">
+              <h2 id="roundTitle">Retrouvez la phrase.</h2>
+              <p id="previewHelp" class="preview-help">
+                Cliquez sur Démarrer quand la classe est prête.
+              </p>
+              <p id="translation" class="translation" hidden></p>
+              <div
+                id="wordField"
+                class="word-field"
+                aria-label="Mots mélangés"
+              ></div>
+              <div id="answerArea" class="answer-area" hidden>
+                <p>
+                  Votre proposition
+                  <button id="clearAnswer" class="text-button">
+                    Tout effacer
+                  </button>
+                </p>
+                <div
+                  id="answerWords"
+                  class="answer-words"
+                  aria-label="Phrase reconstruite"
+                ></div>
+                <p
+                  id="answerFeedback"
+                  class="answer-feedback"
+                  role="status"
+                ></p>
+              </div>
+              <div id="resultArea" class="result-area" hidden></div>
+            </div>
+            <div id="pauseOverlay" class="pause-overlay" hidden>
+              <i data-icon="pause"></i>
+              <h2>Le jeu est en pause</h2>
+              <p>Prenez le temps de réfléchir.</p>
+              <button id="resumeBtn" class="button primary">
+                Reprendre le jeu
+              </button>
+            </div>
+            <footer class="stage-footer">
+              <div class="hint-controls">
+                <button id="translationBtn" class="button secondary">
+                  <i data-icon="eye"></i
+                  ><span>Afficher la traduction</span></button
+                ><button
+                  id="hintBtn"
+                  class="button secondary"
+                  hidden
+                  title="Placer le prochain mot correct"
+                >
+                  <i data-icon="bulb"></i>Un indice
+                </button>
+              </div>
+              <button
+                id="startRoundBtn"
+                class="button primary"
+                data-action="start-selected"
+              >
+                Démarrer<i data-icon="play"></i></button
+              ><button id="revealBtn" class="button primary" hidden>
+                Voir la réponse<i data-icon="eye"></i></button
+              ><button id="nextBtn" class="button primary" hidden>
+                Phrase suivante<i data-icon="arrow"></i>
+              </button>
+            </footer>
+          </section>
+          <aside
+            id="scoreboard"
+            class="scoreboard"
+            aria-label="Scores des équipes"
+          >
+            <div class="score-heading">
+              <h2>Équipes</h2>
+              <button
+                id="resetScores"
+                class="button icon-only"
+                title="Remettre les scores à zéro"
+                aria-label="Remettre les scores à zéro"
+              >
+                <i data-icon="reset"></i>
+              </button>
+            </div>
+            <p id="classCaption" class="muted"></p>
+            <ol id="scoreList"></ol>
+            <div class="score-bottom">
+              <button id="undoScore" class="text-button" disabled>
+                <i data-icon="undo"></i>Annuler le dernier point
+              </button>
+              <p>Ajoutez les points après la réponse des élèves.</p>
+            </div>
+          </aside>
+        </div>
+        <footer id="keyboardHints" class="keyboard-hints" hidden>
+          <span><kbd>Espace</kbd> Pause</span><span><kbd>R</kbd> Réponse</span
+          ><span><kbd>N</kbd> Suivante</span><span><kbd>F</kbd> Projection</span
+          ><span class="click-hint"
+            >Les mots peuvent aussi être remis en ordre par clic.</span
+          >
+        </footer>
+      </section>
+      <section id="view-library" class="view" hidden></section>
+      <section id="view-classes" class="view" hidden></section>
+      <section id="view-help" class="view" hidden></section>
+      <section id="view-settings" class="view" hidden></section>
+    </main>
+    <dialog id="editorDialog" aria-labelledby="dialogTitle">
+      <div id="dialogContent"></div>
+    </dialog>
+    <div id="toast" role="status" class="toast" hidden></div>
+    <input
+      type="file"
+      id="backupInput"
+      accept="application/json,.json"
+      hidden
+    /><input
+      type="file"
+      id="listFileInput"
+      accept="text/plain,.txt,.tsv"
+      hidden
+    />
+  </body>
+</html>

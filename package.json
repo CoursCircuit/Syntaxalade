@@ -1,0 +1,53 @@
+{
+  "name": "syntaxalade",
+  "version": "2.1.0",
+  "description": "Syntaxalade — jeu de remise en ordre de phrases pour la classe",
+  "main": "electron/main.js",
+  "author": "S. Bovat",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "node scripts/build-mac.cjs",
+    "dist:mac": "node scripts/build-mac.cjs",
+    "test": "node --test tests/*.test.cjs",
+    "test:ui": "node tests/ui.cjs",
+    "test:electron": "node tests/electron.cjs"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0",
+    "playwright": "^1.58.2"
+  },
+  "build": {
+    "appId": "edu.syntaxalade.app",
+    "productName": "Syntaxalade",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist/2.1.0"
+    },
+    "files": [
+      "index.html",
+      "style.css",
+      "script.js",
+      "core.js",
+      "assets/icon.svg",
+      "assets/salad.png",
+      "electron/main.js",
+      "electron/preload.js"
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.education",
+      "icon": "build/icon.icns",
+      "identity": "-"
+    },
+    "artifactName": "Syntaxalade-${version}-${arch}.${ext}",
+    "afterPack": "electron/after-pack.js"
+  },
+  "overrides": {
+    "minimatch@>=7 <11": "^11.0.5"
+  }
+}
